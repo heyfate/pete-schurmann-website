@@ -173,31 +173,19 @@ body {
 }
 
 .pete-avatar {
+  .profile-overlay {
     position: absolute;
-    top: 20%;
+    bottom: 5%;
     left: 50%;
     transform: translateX(-50%);
-    width: 120px;
-    height: 120px;
+    text-align: center;
+    color: white;
     z-index: 3;
+    background: rgba(0, 0, 0, 0.7);
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
 }
-
-.pete-face {
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, #F4A460 0%, #DEB887 100%);
-    border-radius: 50%;
-    position: relative;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
-}
-
-.pete-beard {
-    position: absolute;
-    bottom: 20%;
-.profile-photo-real {
-    width: 100%;
-    height: 100%;
-  .profile-photo-real {
     object-position: center;
     border-radius: 20px;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
