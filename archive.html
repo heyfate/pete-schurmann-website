@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Archive - Pete Schurmann</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .archive-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 120px 0 60px;
+            text-align: center;
+        }
+        
+        .archive-controls {
+            background: #f8f9fa;
+            padding: 2rem 0;
+            border-bottom: 1px solid #e1e8ed;
+        }
+        
+        .advanced-search {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .search-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .search-group label {
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+        }
+        
+        .search-group input,
+        .search-group select {
+            padding: 10px;
+            border: 2px solid #e1e8ed;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+        
+        .search-group input:focus,
+        .search-group select:focus {
+            border-color: #3498db;
+            outline: none;
+        }
+        
+        .archive-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+            gap: 2rem;
+            padding: 3rem 0;
+        }
+        
+        .archive-article {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .archive-article:hover {
+            transform: translateY(-5px);
+        }
+        
+        .article-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #e1e8ed;
+        }
+        
+        .article-date {
+            color: #7f8c8d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .article-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+            line-height: 1.4;
+        }
+        
+        .article-excerpt {
+            color: #7f8c8d;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .article-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .article-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .article-tag {
+            background: #e8f4fd;
+            color: #3498db;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 3rem 0;
+        }
+        
+        .page-btn {
+            padding: 10px 15px;
+            border: 2px solid #e1e8ed;
+            background: white;
+            color: #2c3e50;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .page-btn.active,
+        .page-btn:hover {
+            background: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .results-info {
+            text-align: center;
+            color: #7f8c8d;
+            margin: 2rem 0;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #3498db;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+        
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .back-to-top:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+        }
+        
+        @media (max-width: 768px) {
+            .advanced-search {
+                grid-template-columns: 1fr;
+            }
+            
+            .archive-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .article-meta {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>Peter Schurmann</h2>
+                <span>Environmental & Community Journalism</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="archive.html" class="nav-link active">Archive</a></li>
+                <li><a href="index.html#organizations" class="nav-link">Organizations</a></li>
+                <li><a href="index.html#impact" class="nav-link">Impact</a></li>
+                <li><a href="index.html#resources" class="nav-link">Resources</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Archive Header -->
+    <section class="archive-header">
+        <div class="container">
+            <h1>Article Archive</h1>
+            <p>Explore Peter's extensive body of work spanning environmental journalism, international affairs, and community media</p>
+        </div>
+    </section>
+
+    <!-- Archive Controls -->
+    <section class="archive-controls">
+        <div class="container">
+            <div class="advanced-search">
+                <div class="search-group">
+                    <label for="searchTitle">Search Title</label>
+                    <input type="text" id="searchTitle" placeholder="Search article titles...">
+                </div>
+                <div class="search-group">
+                    <label for="searchContent">Search Content</label>
+                    <input type="text" id="searchContent" placeholder="Search article content...">
+                </div>
+                <div class="search-group">
+                    <label for="filterOrganization">Organization</label>
+                    <select id="filterOrganization">
+                        <option value="">All Organizations</option>
+                        <option value="Yonhap News Agency">Yonhap News Agency</option>
+                        <option value="Earth Innovation Institute">Earth Innovation Institute</option>
+                        <option value="American Community Media">American Community Media</option>
+                        <option value="Ethnic Media Services">Ethnic Media Services</option>
+                    </select>
+                </div>
+                <div class="search-group">
+                    <label for="filterCategory">Category</label>
+                    <select id="filterCategory">
+                        <option value="">All Categories</option>
+                        <option value="immigration">Immigration</option>
+                        <option value="civil-rights">Civil Rights</option>
+                        <option value="community">Community</option>
+                        <option value="education">Education</option>
+                        <option value="health">Health</option>
+                        <option value="environment">Environment</option>
+                        <option value="international">International</option>
+                        <option value="politics">Politics</option>
+                        <option value="economy">Economy</option>
+                    </select>
+                </div>
+                <div class="search-group">
+                    <label for="filterYear">Year</label>
+                    <select id="filterYear">
+                        <option value="">All Years</option>
+                        <option value="2024">2024</option>
+                        <option value="2023">2023</option>
+                        <option value="2022">2022</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                        <option value="2015">2015</option>
+                        <option value="2014">2014</option>
+                        <option value="2013">2013</option>
+                        <option value="2012">2012</option>
+                        <option value="2011">2011</option>
+                        <option value="2010">2010</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="filter-tags">
+                <span class="filter-tag active" data-filter="all">All Articles</span>
+                <span class="filter-tag" data-filter="featured">Featured</span>
+                <span class="filter-tag" data-filter="recent">Recent</span>
+                <span class="filter-tag" data-filter="popular">Popular</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Archive Content -->
+    <section class="archive-content">
+        <div class="container">
+            <div class="results-info">
+                <span id="resultsCount">Showing 1-12 of 156 articles</span>
+            </div>
+            
+            <div class="archive-grid" id="archiveGrid">
+                <!-- Article 1 -->
+                <article class="archive-article" data-category="environment" data-organization="Earth Innovation Institute" data-year="2024">
+                    <div class="article-header">
+                        <div class="article-date">March 15, 2024</div>
+                        <h3 class="article-title">Climate Change and Tropical Forest Protection</h3>
+                        <p class="article-excerpt">Analysis of international efforts to protect tropical forests and their crucial role in climate change mitigation, featuring insights from global conservation initiatives.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">Environment</span>
+                                <span class="article-tag">Climate</span>
+                                <span class="article-tag">Conservation</span>
+                            </div>
+                            <span class="read-time">8 min read</span>
+                        </div>
+                        <div class="article-actions">
+                            <a href="#" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 2 -->
+                <article class="archive-article" data-category="international" data-organization="Yonhap News Agency" data-year="2023">
+                    <div class="article-header">
+                        <div class="article-date">December 8, 2023</div>
+                        <h3 class="article-title">Global Media Perspectives on International Affairs</h3>
+                        <p class="article-excerpt">Insights from international news coverage, examining how different regions report on global events and the importance of diverse media perspectives in understanding world affairs.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">International</span>
+                                <span class="article-tag">Media</span>
+                                <span class="article-tag">Global Affairs</span>
+                            </div>
+                            <span class="read-time">6 min read</span>
+                        </div>
+                        <div class="article-actions">
+                            <a href="#" class="read-more-btn">Read More</a>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 3 -->
+                <article class="archive-article" data-category="community" data-organization="American Community Media" data-year="2023">
+                    <div class="article-header">
+                        <div class="article-date">November 22, 2023</div>
+                        <h3 class="article-title">Building Bridges: Community Journalism in Action</h3>
+                        <p class="article-excerpt">Stories of how community journalism brought together diverse ethnic groups in the Bay Area, fostering understanding and collaboration across cultural boundaries.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">Community</span>
+                                <span class="article-tag">Journalism</span>
+                                <span class="article-tag">Diversity</span>
+                            </div>
+                            <span class="read-time">6 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 4 -->
+                <article class="archive-article" data-category="education" data-organization="New California Media" data-year="2023">
+                    <div class="article-header">
+                        <div class="article-date">October 15, 2023</div>
+                        <h3 class="article-title">Educational Access for Immigrant Families</h3>
+                        <p class="article-excerpt">Examining the challenges and successes of educational access for immigrant families in California, highlighting programs that support multilingual education.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">Education</span>
+                                <span class="article-tag">Immigration</span>
+                                <span class="article-tag">Families</span>
+                            </div>
+                            <span class="read-time">7 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 5 -->
+                <article class="archive-article" data-category="health" data-organization="Pacific News Service" data-year="2023">
+                    <div class="article-header">
+                        <div class="article-date">September 8, 2023</div>
+                        <h3 class="article-title">Healthcare Access in Ethnic Communities</h3>
+                        <p class="article-excerpt">How ethnic media outlets helped bridge healthcare access gaps in underserved communities, providing vital information in multiple languages.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">Health</span>
+                                <span class="article-tag">Access</span>
+                                <span class="article-tag">Communities</span>
+                            </div>
+                            <span class="read-time">4 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 6 -->
+                <article class="archive-article" data-category="immigration" data-organization="New America Media" data-year="2023">
+                    <div class="article-header">
+                        <div class="article-date">August 12, 2023</div>
+                        <h3 class="article-title">The Role of Ethnic Media in Immigration Reform</h3>
+                        <p class="article-excerpt">How ethnic media organizations shaped the national conversation on immigration reform, providing platforms for immigrant voices and perspectives.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">Immigration</span>
+                                <span class="article-tag">Reform</span>
+                                <span class="article-tag">Policy</span>
+                            </div>
+                            <span class="read-time">9 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 7 -->
+                <article class="archive-article" data-category="politics" data-organization="Ethnic Media Services" data-year="2023">
+                    <div class="article-header">
+                        <div class="article-date">July 25, 2023</div>
+                        <h3 class="article-title">Voting Rights and Ethnic Media</h3>
+                        <p class="article-excerpt">The crucial role of ethnic media in promoting voter education and participation among immigrant and minority communities.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">Politics</span>
+                                <span class="article-tag">Voting</span>
+                                <span class="article-tag">Rights</span>
+                            </div>
+                            <span class="read-time">5 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 8 -->
+                <article class="archive-article" data-category="economy" data-organization="American Community Media" data-year="2023">
+                    <div class="article-header">
+                        <div class="article-date">June 18, 2023</div>
+                        <h3 class="article-title">Small Business Development in Ethnic Communities</h3>
+                        <p class="article-excerpt">How ethnic media supports small business development and entrepreneurship in immigrant communities across the Bay Area.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">Economy</span>
+                                <span class="article-tag">Business</span>
+                                <span class="article-tag">Entrepreneurship</span>
+                            </div>
+                            <span class="read-time">6 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 9 -->
+                <article class="archive-article" data-category="community" data-organization="New California Media" data-year="2023">
+                    <div class="article-header">
+                        <div class="article-date">May 30, 2023</div>
+                        <h3 class="article-title">Cultural Preservation Through Media</h3>
+                        <p class="article-excerpt">How ethnic media organizations help preserve cultural traditions and languages while adapting to modern communication needs.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">Community</span>
+                                <span class="article-tag">Culture</span>
+                                <span class="article-tag">Preservation</span>
+                            </div>
+                            <span class="read-time">7 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 10 -->
+                <article class="archive-article" data-category="health" data-organization="Pacific News Service" data-year="2023">
+                    <div class="article-header">
+                        <div class="article-date">April 22, 2023</div>
+                        <h3 class="article-title">Mental Health Awareness in Ethnic Communities</h3>
+                        <p class="article-excerpt">Addressing mental health stigma and promoting awareness in ethnic communities through culturally sensitive media coverage.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">Health</span>
+                                <span class="article-tag">Mental Health</span>
+                                <span class="article-tag">Awareness</span>
+                            </div>
+                            <span class="read-time">8 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 11 -->
+                <article class="archive-article" data-category="education" data-organization="New America Media" data-year="2023">
+                    <div class="article-header">
+                        <div class="article-date">March 14, 2023</div>
+                        <h3 class="article-title">Digital Literacy in Immigrant Communities</h3>
+                        <p class="article-excerpt">How ethnic media organizations are helping bridge the digital divide and promote digital literacy among immigrant populations.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">Education</span>
+                                <span class="article-tag">Technology</span>
+                                <span class="article-tag">Digital</span>
+                            </div>
+                            <span class="read-time">6 min read</span>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- Article 12 -->
+                <article class="archive-article" data-category="civil-rights" data-organization="Ethnic Media Services" data-year="2023">
+                    <div class="article-header">
+                        <div class="article-date">February 28, 2023</div>
+                        <h3 class="article-title">Hate Crime Reporting and Prevention</h3>
+                        <p class="article-excerpt">The role of ethnic media in reporting hate crimes and supporting prevention efforts in diverse communities.</p>
+                        <div class="article-meta">
+                            <div class="article-tags">
+                                <span class="article-tag">Civil Rights</span>
+                                <span class="article-tag">Hate Crimes</span>
+                                <span class="article-tag">Prevention</span>
+                            </div>
+                            <span class="read-time">5 min read</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                <button class="page-btn" data-page="1">1</button>
+                <button class="page-btn" data-page="2">2</button>
+                <button class="page-btn" data-page="3">3</button>
+                <button class="page-btn" data-page="4">4</button>
+                <button class="page-btn" data-page="5">5</button>
+                <button class="page-btn" data-page="next">Next</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Peter Schurmann</h3>
+                    <p>Environmental and community journalist in the San Francisco Bay Area.</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="archive.html">Archive</a></li>
+                        <li><a href="index.html#organizations">Organizations</a></li>
+                        <li><a href="index.html#resources">Resources</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Connect</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fas fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Pete Schurmann Ethnic Media Legacy. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Archive-specific JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchTitle = document.getElementById('searchTitle');
+            const searchContent = document.getElementById('searchContent');
+            const filterOrganization = document.getElementById('filterOrganization');
+            const filterCategory = document.getElementById('filterCategory');
+            const filterYear = document.getElementById('filterYear');
+            const articles = document.querySelectorAll('.archive-article');
+            const resultsCount = document.getElementById('resultsCount');
+            const backToTop = document.getElementById('backToTop');
+
+            // Search and filter functionality
+            function filterArticles() {
+                const titleSearch = searchTitle.value.toLowerCase();
+                const contentSearch = searchContent.value.toLowerCase();
+                const organizationFilter = filterOrganization.value;
+                const categoryFilter = filterCategory.value;
+                const yearFilter = filterYear.value;
+
+                let visibleCount = 0;
+
+                articles.forEach(article => {
+                    const title = article.querySelector('.article-title').textContent.toLowerCase();
+                    const content = article.querySelector('.article-excerpt').textContent.toLowerCase();
+                    const organization = article.getAttribute('data-organization');
+                    const category = article.getAttribute('data-category');
+                    const year = article.getAttribute('data-year');
+
+                    const matchesTitle = title.includes(titleSearch);
+                    const matchesContent = content.includes(contentSearch);
+                    const matchesOrganization = !organizationFilter || organization === organizationFilter;
+                    const matchesCategory = !categoryFilter || category === categoryFilter;
+                    const matchesYear = !yearFilter || year === yearFilter;
+
+                    if (matchesTitle && matchesContent && matchesOrganization && matchesCategory && matchesYear) {
+                        article.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        article.style.display = 'none';
+                    }
+                });
+
+                resultsCount.textContent = `Showing ${visibleCount} of ${articles.length} articles`;
+            }
+
+            // Event listeners for search and filter
+            searchTitle.addEventListener('input', filterArticles);
+            searchContent.addEventListener('input', filterArticles);
+            filterOrganization.addEventListener('change', filterArticles);
+            filterCategory.addEventListener('change', filterArticles);
+            filterYear.addEventListener('change', filterArticles);
+
+            // Back to top functionality
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) {
+                    backToTop.classList.add('visible');
+                } else {
+                    backToTop.classList.remove('visible');
+                }
+            });
+
+            backToTop.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+
+            // Pagination functionality
+            const pageButtons = document.querySelectorAll('.page-btn');
+            pageButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    pageButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    // Here you would implement actual pagination logic
+                });
+            });
+
+            // Initialize first page as active
+            pageButtons[0].classList.add('active');
+        });
+    </script>
+</body>
+</html>
