@@ -17,17 +17,14 @@ body {
     margin: 0 auto;
     padding: 0 20px;
 }
-
-/* Navigation */
-.navbar {
-    position: fixed;
-    top: 0;
+.profile-photo-real {
     width: 100%;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-    padding: 1rem 0;
-    border-bottom: 1px solid #f0f0f0;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
 }
 
 .nav-container {
