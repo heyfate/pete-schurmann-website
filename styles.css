@@ -197,6 +197,38 @@ body {
 .pete-beard {
     position: absolute;
     bottom: 20%;
+ .pete-profile-design {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    background: linear-gradient(135deg, #87CEEB 0%, #4682B4 100%);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+}
+
+.pete-avatar {
+    position: absolute;
+    top: 20%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 120px;
+    z-index: 3;
+}
+
+.pete-face {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #F4A460 0%, #DEB887 100%);
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.pete-beard {
+    position: absolute;
+    bottom: 20%;
     left: 20%;
     right: 20%;
     height: 40%;
@@ -278,6 +310,10 @@ body {
     right: 20%;
     width: 40px;
     height: 60px;
+    background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
+    border-radius: 50% 50% 0 0;
+    clip-path: polygon(0 100%, 30% 50%, 60% 70%, 100% 100%);
+}
     background: linear-gradient(135deg, #228B22 0%, #32CD32 100%);
     border-radius: 50% 50% 0 0;
     clip-path: polygon(0 100%, 30% 50%, 60% 70%, 100% 100%);
